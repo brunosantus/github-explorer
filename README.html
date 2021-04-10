@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>&colon;rocket&colon; Sobre o desafio</title>
+        <style>
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <img alt="GoStack" src="file:////Users/brunogarcia/www/bootcamp2021/reactjs02/primeiro-projeto-react/assets/github-explorer.gif" />
+<h3 align="center">
+  Desafio 06: Banco de dados e upload de arquivos no Node.js
+</h3>
+<blockquote align="center">“Só deseje as coisas as quais você está disposto a lutar”!</blockquote>
+<h2 id="rocket-sobre-o-desafio">:rocket: Sobre o desafio</h2>
+<p>A aplicação armazena transações financeiras de entrada e saída e permite o cadastro e a listagem dessas transações, além de permitir a criação de novos registros no banco de dados a partir do envio de um arquivo csv.</p>
+<h3 id="rotas-da-aplicação">Rotas da aplicação</h3>
+<ul>
+<li><strong><code>POST /transactions</code></strong>: A rota recebe <code>title</code>, <code>value</code>, <code>type</code>, e <code>category</code> dentro do corpo da requisição, sendo o <code>type</code> o tipo da transação, que é <code>income</code> para entradas (depósitos) e <code>outcome</code> para saídas (retiradas). Ao cadastrar uma nova transação, a mesma é armazenada dentro do seu banco de dados, possuindo os campos <code>id</code>, <code>title</code>, <code>value</code>, <code>type</code>, <code>category_id</code>, <code>created_at</code>, <code>updated_at</code>.</li>
+</ul>
+<p><strong>Obs 1</strong>: A categoria é armazenada em uma tabela especifica, e tem os campos <code>id</code>, <code>title</code>, <code>created_at</code>, <code>updated_at</code>.</p>
+<p><strong>Obs 2</strong>: Antes de criar uma nova categoria, é verificado se já existe uma categoria com o mesmo título. Caso ela exista, é usado o <code>id</code> já existente no banco de dados.</p>
+<pre><code class="language-json"><div>{
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+  <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Salário&quot;</span>,
+  <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">3000</span>,
+  <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;income&quot;</span>,
+  <span class="hljs-attr">&quot;category&quot;</span>: <span class="hljs-string">&quot;Alimentação&quot;</span>
+}
+</div></code></pre>
+<ul>
+<li><strong><code>GET /transactions</code></strong>: Essa rota retorna uma listagem com todas as transações cadastradas, junto com o valor da soma de entradas, retiradas e total de crédito. Essa rota retorna um objeto do seguinte formato:</li>
+</ul>
+<pre><code class="language-json"><div>{
+  <span class="hljs-attr">&quot;transactions&quot;</span>: [
+    {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+      <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Salário&quot;</span>,
+      <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">4000</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;income&quot;</span>,
+      <span class="hljs-attr">&quot;category&quot;</span>: {
+        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+        <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Salary&quot;</span>,
+        <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+        <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+      },
+      <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+      <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+    },
+    {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+      <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Freela&quot;</span>,
+      <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">2000</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;income&quot;</span>,
+      <span class="hljs-attr">&quot;category&quot;</span>: {
+        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+        <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Others&quot;</span>,
+        <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+        <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+      },
+      <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+      <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+    },
+    {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+      <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Pagamento da fatura&quot;</span>,
+      <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">4000</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;outcome&quot;</span>,
+      <span class="hljs-attr">&quot;category&quot;</span>: {
+        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+        <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Others&quot;</span>,
+        <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+        <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+      },
+      <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+      <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+    },
+    {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+      <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Cadeira Gamer&quot;</span>,
+      <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-number">1200</span>,
+      <span class="hljs-attr">&quot;type&quot;</span>: <span class="hljs-string">&quot;outcome&quot;</span>,
+      <span class="hljs-attr">&quot;category&quot;</span>: {
+        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;uuid&quot;</span>,
+        <span class="hljs-attr">&quot;title&quot;</span>: <span class="hljs-string">&quot;Recreation&quot;</span>,
+        <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+        <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+      },
+      <span class="hljs-attr">&quot;created_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>,
+      <span class="hljs-attr">&quot;updated_at&quot;</span>: <span class="hljs-string">&quot;2020-04-20T00:00:49.620Z&quot;</span>
+    }
+  ],
+  <span class="hljs-attr">&quot;balance&quot;</span>: {
+    <span class="hljs-attr">&quot;income&quot;</span>: <span class="hljs-number">6000</span>,
+    <span class="hljs-attr">&quot;outcome&quot;</span>: <span class="hljs-number">5200</span>,
+    <span class="hljs-attr">&quot;total&quot;</span>: <span class="hljs-number">800</span>
+  }
+}
+</div></code></pre>
+<p><strong>Obs 3</strong>: Dentro de balance, o income é a soma de todos os valores das transações com <code>type</code> income. O outcome é a soma de todos os valores das transações com <code>type</code> outcome, e o total é o valor de <code>income - outcome</code>.</p>
+<p><strong>Obs 4</strong>: Para fazer a soma dos valores, foi utilizado a função <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce">reduce</a> para agrupar as transações pela propriedade <code>type</code>, assim consegui somar todos os valores com facilidade e obter o retorno do <code>balance</code>.</p>
+<ul>
+<li><strong><code>DELETE /transactions/:id</code></strong>: A rota deleta uma transação com o <code>id</code> presente nos parâmetros da rota;</li>
+</ul>
+<ul>
+<li><strong><code>POST /transactions/import</code></strong>: A rota permiti a importação de um arquivo com formato <code>.csv</code> contendo as mesmas informações necessárias para criação de uma transação <code>id</code>, <code>title</code>, <code>value</code>, <code>type</code>, <code>category_id</code>, <code>created_at</code>, <code>updated_at</code>, onde cada linha do arquivo CSV é um novo registro para o banco de dados, e por fim retorna todas as <code>transactions</code> que foram importadas para o banco de dados. O arquivo csv, contém o seguinte <a href="./assets/file.csv">modelo</a></li>
+</ul>
+<h3 id="específicação-dos-testes">Específicação dos testes</h3>
+<p>Em cada teste, tem uma breve descrição no que sua aplicação deve cumprir para que o teste passe.</p>
+<p>Para esse desafio, temos os seguintes testes:</p>
+<h4 align="center">
+  ⚠️ Antes de rodar os testes, crie um banco de dados com o nome "gostack_desafio06_tests" para que todos os testes possam executar corretamente ⚠️
+</h4>
+<ul>
+<li><strong><code>should be able to create a new transaction</code></strong>: Para que esse teste passe, a aplicação deve permitir que uma transação seja criada, e retorne um json com a transação criado.</li>
+</ul>
+<ul>
+<li><strong><code>should create tags when inserting new transactions</code></strong>: Para que esse teste passe, a aplicação deve permitir que ao criar uma nova transação com uma categoria que não existe, essa seja criada e inserida no campo category_id da transação com o <code>id</code> que acabou de ser criado.</li>
+</ul>
+<ul>
+<li><strong><code>should not create tags when they already exists</code></strong>: Para que esse teste passe, a aplicação deve permitir que ao criar uma nova transação com uma categoria que já existe, seja atribuído ao campo category_id da transação com o <code>id</code> dessa categoria existente, não permitindo a criação de categorias com o mesmo <code>title</code>.</li>
+</ul>
+<ul>
+<li><strong><code>should be able to list the transactions</code></strong>: Para que esse teste passe, a aplicação deve permitir que seja retornado um array de objetos contendo todas as transações junto ao balanço de income, outcome e total das transações que foram criadas até o momento.</li>
+</ul>
+<ul>
+<li><strong><code>should not be able to create outcome transaction without a valid balance</code></strong>: Para que esse teste passe, a aplicação não deve permitir que uma transação do tipo <code>outcome</code> extrapole o valor total que o usuário tem em caixa (total de income), retornando uma resposta com código HTTP 400 e uma mensagem de erro no seguinte formato: <code>{ error: string }</code>.</li>
+</ul>
+<ul>
+<li><strong><code>should be able to delete a transaction</code></strong>: Para que esse teste passe, você deve permitir que a sua rota de delete exclua uma transação, e ao fazer a exclusão, ele retorne uma resposta vazia, com status 204.</li>
+</ul>
+<ul>
+<li><strong><code>should be able to import transactions</code></strong>: Para que esse teste passe, a aplicação deve permitir que seja importado um arquivo csv, contendo o seguinte <a href="./assets/file.csv">modelo</a>. Com o arquivo importado, você deve permitir que seja criado no banco de dados todos os registros e categorias que estavam presentes nesse arquivo, e retornar todas as transactions que foram importadas.</li>
+</ul>
+<h2 id="memo-licença">:memo: Licença</h2>
+<p>Esse projeto está sob a licença MIT. Veja o arquivo <a href="../LICENSE">LICENSE</a> para mais detalhes.</p>
+<hr>
+<p>Feito com 💜 by Rocketseat :wave: <a href="https://discordapp.com/invite/gCRAFhc">Entre na nossa comunidade!</a></p>
+
+    </body>
+    </html>
