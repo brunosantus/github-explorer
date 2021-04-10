@@ -11,9 +11,11 @@
 
 Na aplicação temos duas páginas:
 
-**1) Dashboard** Exibe a lista de repositórios cadastrados.
+**1) Dashboard** 
+Exibe a lista de repositórios cadastrados.
 
-**2) Repository** Os detalhes do repositório com as seguintes informações:
+**2) Repository** 
+Detalhes do repositório com as seguintes informações:
 
 ```js
 {
